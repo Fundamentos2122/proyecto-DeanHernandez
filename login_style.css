@@ -149,5 +149,8 @@ section p{
     
 }
 
+button:hover{
+    background-color: #ddd;
+}
 
 /* logo blue color... #14505D secondary color?*/

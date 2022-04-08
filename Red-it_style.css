@@ -302,3 +302,24 @@ footer{
     }
 
 }
+
+
+button[type=Start-post]{
+    background-color: #ddd;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    align-self: center;
+    padding: 12px;
+    border: 1px solid black;
+}
+
+.f-tab{
+    padding: 4px;
+    border: 1px solid black;
+    margin: 4px;
+}
+
+button:hover{
+    background-color: #ccc;
+}

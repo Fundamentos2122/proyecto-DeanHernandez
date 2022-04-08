@@ -159,3 +159,7 @@ footer{
     }
 
 }
+
+button:hover{
+    background-color: #ddd;
+}
