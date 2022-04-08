@@ -16,6 +16,10 @@ ul, ol {
     src: url('VAG-Rounded-Regular.ttf');
 }
 
+body{
+    background-color: rgb(231, 231, 231);
+}
+
 header {
     width: 100%;
     background-color: #FEE499;
@@ -81,7 +85,7 @@ footer{
 
     #Create-Post{
         position: relative;
-        margin: 16px 0px ;
+        margin: 16px 0px;
         width: 40%;
         margin-left: 30%;
         margin-right: 30%;
@@ -91,7 +95,77 @@ footer{
         align-items: center;
         column-gap: 16px;
         justify-content: center;
-        }
+        box-shadow: 4px 3px 8px 1px #969696;
+    }
+
+    #Tendency{
+
+    }
+    
+    #Filter{
+            position: relative;
+            margin: 16px 0px;
+            margin-left: 35%;
+            margin-right: 35%;
+            width: 30%;
+            background-color: #FEE499;
+            border: 4px solid #14505D;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            row-gap: 8px;
+            box-shadow: 4px 3px 8px 1px #969696;
+    }
+
+    .Post{
+        margin-top: 16px;
+        margin-bottom: 16px;
+        padding: 4px;
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+        background-color: white;
+        border-radius: 8px;
+        border: 1px solid black;
+        box-shadow: 4px 3px 8px 1px #969696;
+        display: flex;
+    }
+
+    .Rating-box{
+        margin: 8px;
+    }
+
+    .user-date_box{
+        display: flex;
+        column-gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 4px;
+    }
+
+    .title-box{
+        margin-bottom: 4px;
+    }
+
+    .Post-title{
+        font-weight: bold;
+    }
+
+    .Comment-box{
+        display: flex;
+        column-gap: 32px;
+        align-items: flex-start;
+        margin-bottom: 4px;
+    }
+
+    .Post-Image img{
+        margin: 16px;
+        width: 100%;
+    }
+
+    .Post-Video video{
+        margin: 16px;
+        width: 100%
+    }
 
 }
 
@@ -159,5 +233,72 @@ footer{
         column-gap: 16px;
         justify-content: center;
         }
+
+    #Tendency{
+
+    }
+    
+    #Filter{
+            position: relative;
+            margin: 16px 0px;
+            margin-left: 25%;
+            margin-right: 25%;
+            width: 50%;
+            background-color: #FEE499;
+            border: 4px solid #14505D;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            row-gap: 8px;
+    }
+
+    .Post{
+        margin-top: 16px;
+        margin-bottom: 16px;
+        padding: 4px;
+        width: 94%;
+        margin-left: 3%;
+        margin-right: 3%;
+        background-color: white;
+        border-radius: 8px;
+        border: 1px solid black;
+        display: flex;
+    }
+
+    .Rating-box{
+        margin: 8px;
+    }
+
+    .user-date_box{
+        display: flex;
+        column-gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 4px;
+    }
+
+    .title-box{
+        margin-bottom: 4px;
+    }
+
+    .Post-title{
+        font-weight: bold;
+    }
+
+    .Comment-box{
+        display: flex;
+        column-gap: 32px;
+        align-items: flex-start;
+        margin-bottom: 4px;
+    }
+
+    .Post-Image img{
+        padding: 8px;
+        width: 100%;
+    }
+
+    .Post-Video video{
+        width: 100%;
+        padding: 8px;
+    }
 
 }
