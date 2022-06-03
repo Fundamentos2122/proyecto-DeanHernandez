@@ -23,6 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
         if(array_key_exists("text", $_POST) && array_key_exists("id_post", $_POST) && array_key_exists("id_user", $_SESSION) && array_key_exists("username", $_SESSION)){
 
+            if($_POST["text"] === "")
+        {
+            echo "No introduciste texto";
+            exit();
+        }
+
             $id_user = $_SESSION["id_user"];
             $username = $_SESSION["username"];
             $text = $_POST["text"];

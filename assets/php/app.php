@@ -5,7 +5,7 @@ const modalPost = document.getElementById("modalPost"); //modal del post a visua
 const modalPostComments = document.getElementById("modalPostComments"); //dentro del modal del post el div que contiene los comentarios del post
 const modalMain = document.getElementById("modalMain");
 //const keyList = "postlist";
-//const keyList2 = "commentlist"; //Funciona en conjunto con ModalPostComments
+//const keyList2 = "commentlist"; 
 
 
 document.addEventListener("DOMContentLoaded", function() {

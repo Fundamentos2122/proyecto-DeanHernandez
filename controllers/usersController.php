@@ -1,6 +1,7 @@
 <?php 
 
 include("../models/DB.php");
+include("../models/User.php");
 
 
 try {
@@ -20,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         session_start();
         
         if (array_key_exists("user-n", $_POST) && array_key_exists("id_user", $_SESSION)){
+
+            if($_POST["user-n"] === ""){
+                echo "no introduciste un nuevo nombre";
+                exit();
+            }
+
         try{
             putUsername($_SESSION["id_user"], $_POST["user-n"]);
          
@@ -40,8 +47,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         session_start();
 
+        //Verificar contraseña original
+        try{
+
+            $id_user = $_SESSION["id_user"];
+            $password = $_POST["cont-a"];
+
+            $query2 = $connection->prepare('SELECT * FROM users WHERE id_user = :id_user');
+            $query2->bindParam(':id_user', $id_user, PDO::PARAM_STR);
+            $query2->execute();
+
+            if ($query2->rowCount() === 0) {
+                echo "Usuario no encontrado";
+                // header('Location: http://localhost/twitter/');
+                exit();
+            }
+
+            $user;
+
+            while($row = $query2->fetch(PDO::FETCH_ASSOC)) {
+                $user = new User($row["id_user"], $row["username"], $row["password"], $row["rating"], $row["type"]);
+            }
+
+            if (!password_verify($password, $user->getPassword())) {
+                echo "Contraseña inválida";
+                exit();
+            }
+
+        }catch(PDOException $e){
+            echo $e;
+        }
+
+        if($_POST["cont-a"] === ""){
+            echo "no introduciste una contraseña";
+            exit();
+        }
+
+        if($_POST["cont-n"] === ""){
+            echo "no introduciste una contraseña";
+            exit();
+        }
+
         if(trim($_POST["cont-n"]) !== trim($_POST["verif_cont-n"])){
             echo "Las contraseñas nuevas no coinciden"; //Pendiente modificar la manera de alertar que no coinciden
+            exit();
         }
         
         if (array_key_exists("cont-n", $_POST) && array_key_exists("id_user", $_SESSION)){
@@ -74,6 +123,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         }
     else{
+
+        if($_POST["password"] === ""){
+            echo "no introduciste una contraseña";
+            exit();
+        }
+
+        if($_POST["username"] === ""){
+            echo "no introduciste un nombre de usuario";
+            exit();
+        }
 
     if(trim($_POST["password"]) !== trim($_POST["verif_contraseña"])){
         echo "Las contraseñas no coinciden"; //Pendiente modificar la manera de alertar que no coinciden
@@ -146,7 +205,6 @@ function putPassword($id_user, $password) {
     global $connection;
 
     try {
-
 
         $password = password_hash($password, PASSWORD_DEFAULT);
         

@@ -29,6 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         //exit();
 
     if(array_key_exists("title", $_POST) && array_key_exists("id_user", $_SESSION) && array_key_exists("username", $_SESSION)){
+
+        if($_POST["title"] === "")
+        {
+            echo "No introduciste un nombre al post nuevo";
+            exit();
+        }
+
     try{
 
     $id_user = $_SESSION["id_user"];
