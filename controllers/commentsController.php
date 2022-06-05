@@ -24,10 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         if(array_key_exists("text", $_POST) && array_key_exists("id_post", $_POST) && array_key_exists("id_user", $_SESSION) && array_key_exists("username", $_SESSION)){
 
             if($_POST["text"] === "")
-        {
-            echo "No introduciste texto";
+            {
+            $_SESSION['message'] = "No introduciste texto";
+            header('Location: http://localhost/red-it/views/index.php');
             exit();
-        }
+            }
 
             $id_user = $_SESSION["id_user"];
             $username = $_SESSION["username"];
@@ -55,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                  }
                  else {
                      header('Location: http://localhost/red-it/views/index.php');
+                     exit();
                  }
              }
              catch(PDOException $e) {

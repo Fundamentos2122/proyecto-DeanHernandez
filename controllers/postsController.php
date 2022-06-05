@@ -28,57 +28,60 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         //exit();
 
-    if(array_key_exists("title", $_POST) && array_key_exists("id_user", $_SESSION) && array_key_exists("username", $_SESSION)){
-
-        if($_POST["title"] === "")
+        if(array_key_exists("title", $_POST) && array_key_exists("id_user", $_SESSION) && array_key_exists("username", $_SESSION))
         {
-            echo "No introduciste un nombre al post nuevo";
-            exit();
-        }
+            if($_POST["title"] === "")
+            {
+                $_SESSION['message'] = "No introduciste un Titulo";
+                header('Location: http://localhost/red-it/views/Create_Thread.php');
+                exit();
+            }
 
-    try{
+            try{
 
-    $id_user = $_SESSION["id_user"];
-    $username = $_SESSION["username"];
-    $text = $_POST["text"];
-    $title = $_POST["title"];
-    $photo = "";
-    $rating = 0;
-    $created_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
-    $updated_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+                $id_user = $_SESSION["id_user"];
+                $username = $_SESSION["username"];
+                $text = $_POST["text"];
+                $title = $_POST["title"];
+                $photo = "";
+                $rating = 0;
+                $created_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+                $updated_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
 
-    //Si el tamaño de la foto es mayor a 0...
-    if ($_FILES["photo"]["size"] > 0) { 
-        
-        $tmp_name = $_FILES["photo"]["tmp_name"];
-        $photo = file_get_contents($tmp_name);
-    }
+                //Si el tamaño de la foto es mayor a 0...
+                if ($_FILES["photo"]["size"] > 0) { 
+                    $tmp_name = $_FILES["photo"]["tmp_name"];
+                    $photo = file_get_contents($tmp_name);
+                }
 
-    try {
-        $query = $connection->prepare('INSERT INTO posts VALUES(NULL, :id_user, :username, :text, :title, :photo, :rating, :created_at, :updated_at)');
-         $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-         $query->bindParam(':username', $username, PDO::PARAM_STR);
-         $query->bindParam(':text', $text, PDO::PARAM_STR);
-         $query->bindParam(':title', $title, PDO::PARAM_STR);
-         $query->bindParam(':photo', $photo, PDO::PARAM_STR);
-         $query->bindParam(':rating', $rating, PDO::PARAM_INT);
-         $query->bindParam(':created_at', $created_at, PDO::PARAM_STR);
-         $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+                try {
+                    $query = $connection->prepare('INSERT INTO posts VALUES(NULL, :id_user, :username, :text, :title, :photo, :rating, :created_at, :updated_at)');
+                    $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                    $query->bindParam(':username', $username, PDO::PARAM_STR);
+                    $query->bindParam(':text', $text, PDO::PARAM_STR);
+                    $query->bindParam(':title', $title, PDO::PARAM_STR);
+                    $query->bindParam(':photo', $photo, PDO::PARAM_STR);
+                    $query->bindParam(':rating', $rating, PDO::PARAM_INT);
+                    $query->bindParam(':created_at', $created_at, PDO::PARAM_STR);
+                    $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
          
-         $query->execute();
+                    $query->execute();
  
-         if($query->rowCount() === 0) {
-             echo "Error en la inserción";
-             exit();
-         }
-         else {
-             header('Location: http://localhost/red-it/views/index.php');
-         }
-     }
-     catch(PDOException $e) {
-         echo $e;
-         exit();
-      }
+                    if($query->rowCount() === 0) {
+                        $_SESSION['message'] = "Error en la inserción";
+                        header('Location: http://localhost/red-it/views/Create_Thread.php');
+                        exit();
+                    }
+                    else{
+                        header('Location: http://localhost/red-it/views/index.php');
+                        exit();
+                    }
+                }
+                catch(PDOException $e) {
+                    $_SESSION['message'] = "Error en la inserción";
+                    header('Location: http://localhost/red-it/views/Create_Thread.php');
+                    exit();
+                }
 
                 header('Location: http://localhost/red-it/views/index.php');
             }
@@ -90,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         else{
             echo "Datos no encontrados";
-                exit();
+            exit();
         }
 
     }

@@ -13,6 +13,13 @@
     <p id="Change-U_Header">Change Username</p>
     </header>
 
+    <?php include("../assets/php/errorMessage.php");
+    if(!empty($_SESSION['message'])){
+        echo '<script>MostrarError();</script>';
+        unset($_SESSION['message']);
+    }
+    ?>
+
     <section>
 
         <div id="Form-group">

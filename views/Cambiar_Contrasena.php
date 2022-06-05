@@ -13,6 +13,13 @@
     <p id="Change-P_Header">Change Password</p> 
     </header>
 
+    <?php include("../assets/php/errorMessage.php");
+    if(!empty($_SESSION['message'])){
+        echo '<script>MostrarError();</script>';
+        unset($_SESSION['message']);
+    }
+    ?>
+
     <section>
         <div id="Form-group">
             <form action="../controllers/usersController.php" method="POST" autocomplete="off" class="flow">

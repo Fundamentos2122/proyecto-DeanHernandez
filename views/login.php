@@ -9,11 +9,6 @@
 </head>
 <body>
 
-<?php 
-session_start();
-session_destroy();
-?>
-
     <header>
         <img src="../resources/images/red-it_logo.png" alt="" id="red-it_logo"></a>
         <a target="_self" href="index.php">
@@ -21,10 +16,25 @@ session_destroy();
         </a>
         <p id="Login_Header">Login</p>
     </header>
+
+    <?php 
+    include("../assets/php/errorMessage.php");
+    if(isset($_SESSION)){
+        if(isset($_SESSION['message'])){
+            echo '<script>MostrarError();</script>';
+        }
+    session_destroy();
+    }else
+    {
+        session_start();
+    }
+    ?>
+
+
     <section>
         <div id="Form-group">
             <form action="../controllers/accessController.php" method="POST" autocomplete="off" class="flow">
-                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_method" value="login">
                 <div>
                 <input type="text" id="usuario" name="username" placeholder="Usuario">
                 </div>

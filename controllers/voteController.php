@@ -22,30 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
         session_start();
 
-        //echo $_POST["value"];
-        //echo $_POST["id_post"];
-        //echo $_SESSION["id_user"];
-        //exit();
-
         if(array_key_exists("id_post", $_POST) && array_key_exists("value", $_POST) && array_key_exists("id_user", $_SESSION) ){
 
             $id_user = $_SESSION["id_user"];
             $id_post = $_POST["id_post"];
             $value = $_POST["value"];
 
-            try {
+            try{
                 $query = $connection->prepare('INSERT INTO post_votes VALUES(:id_post, :id_user, :value)');
                 $query->bindParam(':id_post', $id_post, PDO::PARAM_INT);
                 $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                 $query->bindParam(':value', $value, PDO::PARAM_INT);
+                $query->bindParam(':value', $value, PDO::PARAM_INT);
            
-                 $query->execute();
+                $query->execute();
          
-                 if($query->rowCount() === 0) {
-                     echo "Error en la inserción";
-                     exit();
-                 }
-                 else {
+                if($query->rowCount() === 0) {
+                    $_SESSION['message'] = "Error en la inserción";
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+                else {
 
                     
                     try{
@@ -56,9 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                         $row = $q->fetch(PDO::FETCH_ASSOC);
                         $total_rating = $row['total_rating'];
                         
-                        echo $total_rating;
-                        //exit();
-
                         try {
    
                             $query = $connection->prepare('UPDATE posts SET rating = :total_rating WHERE id_post = :id_post');
@@ -67,34 +60,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                             $query->execute();
                     
                             if($query->rowCount() === 0) {
-                                echo "Error en la actualización";
+                                $_SESSION['message'] = "Error en la actualización";
+                                header('Location: http://localhost/red-it/views/index.php');
+                                exit();
                             }
                             else {
                                     //echo "Registro guardado";
                             }
                         }
                         catch(PDOException $e) {
-                            echo $e;
-                        }
-
-                        }
-                        catch(PDOException $e){
-                            echo $e;
+                            $_SESSION['message'] = "Error en la actualización";
+                            header('Location: http://localhost/red-it/views/index.php');
                             exit();
                         }
 
-                     header('Location: http://localhost/red-it/views/index.php');
                     }
+                    catch(PDOException $e){
+                        $_SESSION['message'] = "Error en la recuperación se post_votes";
+                        header('Location: http://localhost/red-it/views/index.php');
+                        exit();
+                    }
+
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
                 }
-             catch(PDOException $e) {
-                 //echo $e;
-                 echo "Voto duplicado para un mismo post (Conflicto UNIQUE KEY)";
-                 exit();
-              }
+            }
+            catch(PDOException $e) {
+                $_SESSION['message'] = "Voto duplicado para un mismo Post";
+                header('Location: http://localhost/red-it/views/index.php');
+                exit();
+            }
 
         }
         else{
-            echo "faltan recibir datos del POST";
+            $_SESSION['message'] = "Faltan recibir datos del POST";
+            header('Location: http://localhost/red-it/views/index.php');
             exit();
         }
 
@@ -113,17 +113,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                 $query = $connection->prepare('INSERT INTO comment_votes VALUES(:id_comment, :id_user, :value)');
                 $query->bindParam(':id_comment', $id_comment, PDO::PARAM_INT);
                 $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                 $query->bindParam(':value', $value, PDO::PARAM_INT);
+                $query->bindParam(':value', $value, PDO::PARAM_INT);
            
-                 $query->execute();
+                $query->execute();
          
-                 if($query->rowCount() === 0) {
-                     echo "Error en la inserción";
-                     exit();
-                 }
-                 else {
-
-
+                if($query->rowCount() === 0) {
+                    $_SESSION['message'] = "Error en la inserción";
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+                else{
                     try{
                         $q = $connection->prepare('SELECT SUM(value) AS total_rating FROM comment_votes WHERE id_comment = :id_comment');
                         $q->bindParam(':id_comment', $id_comment, PDO::PARAM_INT);
@@ -131,9 +130,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
             
                         $row = $q->fetch(PDO::FETCH_ASSOC);
                         $total_rating = $row['total_rating'];
-                        
-                        echo $total_rating;
-                        //exit();
 
                         try {
    
@@ -143,34 +139,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                             $query->execute();
                     
                             if($query->rowCount() === 0) {
-                                echo "Error en la actualización";
+                                $_SESSION['message'] = "Error en la actualización";
+                                header('Location: http://localhost/red-it/views/index.php');
+                                exit();
                             }
                             else {
                                     //echo "Registro guardado";
                             }
                         }
                         catch(PDOException $e) {
-                            echo $e;
-                        }
-
-                        }
-                        catch(PDOException $e){
-                            echo $e;
+                            $_SESSION['message'] = "Error en la actualización de rating de comment";
+                            header('Location: http://localhost/red-it/views/index.php');
                             exit();
                         }
 
+                    }
+                    catch(PDOException $e){
+                        $_SESSION['message'] = "Error en la recuperación de SUM comment_votes ";
+                        header('Location: http://localhost/red-it/views/index.php');
+                        exit();
+                    }
 
-                     header('Location: http://localhost/red-it/views/index.php');
-                 }
-             }
-             catch(PDOException $e) {
-                 echo $e;
-                 exit();
-              }
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+            }
+            catch(PDOException $e) {
+                $_SESSION['message'] = "Voto duplicado para un mismo Comentario";
+                header('Location: http://localhost/red-it/views/index.php');
+                exit();
+            }
 
         }
         else{
-            echo "faltan recibir datos del POST";
+            $_SESSION['message'] = "Faltan recibir datos del POST";
+            header('Location: http://localhost/red-it/views/index.php');
             exit();
         }
 
@@ -199,7 +202,8 @@ else if($_SERVER["REQUEST_METHOD"] === "GET"){
             echo json_encode($post_votes); //response text
         }
         catch(PDOException $e){
-            echo $e;
+            $_SESSION['message'] = "Error en la recuperación de GET post_votes";
+            header('Location: http://localhost/red-it/views/index.php');
             exit();
             }
         }
@@ -224,8 +228,9 @@ else if($_SERVER["REQUEST_METHOD"] === "GET"){
                 echo json_encode($comment_votes); //response text
             }
             catch(PDOException $e){
-                echo $e;
-                exit();
+            $_SESSION['message'] = "Error en la recuperación de GET comment_votes";
+            header('Location: http://localhost/red-it/views/index.php');
+            exit();
             }
         }
     }

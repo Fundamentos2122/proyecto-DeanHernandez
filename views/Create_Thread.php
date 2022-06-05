@@ -19,6 +19,13 @@
     <p id="Create-post_Header">Create Post</p>
     </header>
 
+    <?php include("../assets/php/errorMessage.php");
+    if(!empty($_SESSION['message'])){
+        echo '<script>MostrarError();</script>';
+        unset($_SESSION['message']);
+    }
+    ?>
+
     <section>
         <br>
     <h2>Detalles del Post: </h2>

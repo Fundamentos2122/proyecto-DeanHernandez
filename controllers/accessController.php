@@ -13,7 +13,10 @@ catch(PDOException $e) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if ($_POST["_method"] === "POST") {
+    if ($_POST["_method"] === "login") {
+
+        session_start();
+
         $username = trim($_POST["username"]);
         $password = trim($_POST["password"]);
 
@@ -23,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $query->execute();
 
             if ($query->rowCount() === 0) {
-                echo "Usuario no encontrado";
-                // header('Location: http://localhost/twitter/');
+                $_SESSION['message'] = "Usuario no encontrado";
+                header('Location: http://localhost/red-it/views/login.php');
                 exit();
             }
 
@@ -35,11 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             if (!password_verify($password, $user->getPassword())) {
-                echo "Contraseña inválida";
+                $_SESSION['message'] = "Contraseña invalida";
+                header('Location: http://localhost/red-it/views/login.php');
                 exit();
             }
-
-            session_start();
 
             $_SESSION["id_user"] = $user->getId();
             $_SESSION["username"] = $user->getUsername();
@@ -52,15 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         catch(PDOException $e) {
             echo $e;
         }
-    }
-    else if($_POST["_method"] === "DELETE") {
-        session_start();
-
-        session_destroy();
-
-        header('Location: http://localhost/red-it/');
-
-        exit();
     }
 }
 

@@ -15,7 +15,7 @@ catch(PDOException $e) {
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
-
+    //Pantalla Configuracion de nombre
     if ($_POST["_method"] === "ChangeUsername"){
 
         session_start();
@@ -23,7 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (array_key_exists("user-n", $_POST) && array_key_exists("id_user", $_SESSION)){
 
             if($_POST["user-n"] === ""){
-                echo "no introduciste un nuevo nombre";
+                $_SESSION['message'] = "No introduciste un nuevo nombre";
+                header('Location: http://localhost/red-it/views/Cambiar_Usuario.php');
                 exit();
             }
 
@@ -31,18 +32,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             putUsername($_SESSION["id_user"], $_POST["user-n"]);
          
             $_SESSION["username"] = $_POST["user-n"];
-
             header('Location: http://localhost/red-it/views/index.php');
+            exit();
         }
         catch(PDOException $e) {
-            echo $e;
-         }
+            $_SESSION['message'] = "Ya existe un usuario con ese nombre";
+            header('Location: http://localhost/red-it/views/Cambiar_Usuario.php');
+            exit();
+        }
         }
         else{
-           echo "Error al encontrar variables";
+            $_SESSION['message'] = "Error al encotrar variables";
+            header('Location: http://localhost/red-it/views/Cambiar_Usuario.php');
+            exit();
         } 
 
     }
+    //Pantalla configuracion de contraseña
     else if($_POST["_method"] === "ChangePassword"){
         
         session_start();
@@ -58,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $query2->execute();
 
             if ($query2->rowCount() === 0) {
-                echo "Usuario no encontrado";
-                // header('Location: http://localhost/twitter/');
+                $_SESSION['message'] = "Usuario no encontrado";
+                header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
                 exit();
             }
 
@@ -70,26 +76,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             if (!password_verify($password, $user->getPassword())) {
-                echo "Contraseña inválida";
+                $_SESSION['message'] = "Contraseña invalida";
+                header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
                 exit();
             }
 
         }catch(PDOException $e){
             echo $e;
+            exit();
         }
 
         if($_POST["cont-a"] === ""){
-            echo "no introduciste una contraseña";
+            $_SESSION['message'] = "No introduciste una contraseña";
+            header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
             exit();
         }
 
         if($_POST["cont-n"] === ""){
-            echo "no introduciste una contraseña";
+            $_SESSION['message'] = "No introduciste una contraseña";
+            header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
             exit();
         }
 
         if(trim($_POST["cont-n"]) !== trim($_POST["verif_cont-n"])){
-            echo "Las contraseñas nuevas no coinciden"; //Pendiente modificar la manera de alertar que no coinciden
+            $_SESSION['message'] = "Las contraseñas nuevas no coinciden";
+            header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
             exit();
         }
         
@@ -98,74 +109,91 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             putPassword(trim($_SESSION["id_user"]), trim($_POST["cont-n"]));
 
             header('Location: http://localhost/red-it/views/index.php');
+            exit();
         }
         catch(PDOException $e) {
             echo $e;
+            exit();
          }
         }
         else{
-           echo "Error al encontrar variables";
+            $_SESSION['message'] = "Error al encontrar variables";
+            header('Location: http://localhost/red-it/views/Cambiar_Contrasena.php');
+            exit();
         } 
 
-    }else if($_POST["_method"] === "DeleteUser")
-        {
-            session_start();
+    }
+    //Pantalla Configuracion - Boton de elminar usuario
+    else if($_POST["_method"] === "DeleteUser"){
+        session_start();
 
-            if(array_key_exists("id_user",$_SESSION))
+        if(array_key_exists("id_user",$_SESSION)){
             try{
-            deleteUser($_SESSION["id_user"]);
-            session_destroy();
-            header('Location: http://localhost/red-it/');
+                deleteUser($_SESSION["id_user"]);
+                session_destroy();
+                header('Location: http://localhost/red-it/');
+                exit();
             }
             catch(PDOException $e){
                 echo $e;
+                exit();
             }
-
         }
-    else{
+
+    }
+    //Pantalla de Registro de usuario
+    else if($_POST["_method"] === "CreateUser"){
+
+        session_start();
 
         if($_POST["password"] === ""){
-            echo "no introduciste una contraseña";
+            $_SESSION['message'] = "No introduciste una contraseña";
+            header('Location: http://localhost/red-it/views/Register.php');
             exit();
         }
 
         if($_POST["username"] === ""){
-            echo "no introduciste un nombre de usuario";
+            $_SESSION['message'] = "No introduciste un nombre de usuario";
+            header('Location: http://localhost/red-it/views/Register.php');
             exit();
         }
 
-    if(trim($_POST["password"]) !== trim($_POST["verif_contraseña"])){
-        echo "Las contraseñas no coinciden"; //Pendiente modificar la manera de alertar que no coinciden
-    }
+        if(trim($_POST["password"]) !== trim($_POST["verif_contraseña"])){
+            $_SESSION['message'] = "No coinciden las contraseñas";
+            header('Location: http://localhost/red-it/views/Register.php');
+            exit();
+        }
     
-    else{
-    $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
         
-    $password = password_hash($password, PASSWORD_DEFAULT);
+        $username = trim($_POST["username"]);
+        $password = trim($_POST["password"]);
+        
+        $password = password_hash($password, PASSWORD_DEFAULT);
     
-    $type = "normal";
-    $rating = 0;
+        $type = "normal";
+        $rating = 0;
     
-    try {
-       $query = $connection->prepare('INSERT INTO users(username, password, rating, type) values(:username, :password, :rating, :type)');
-        $query->bindParam(':username', $username, PDO::PARAM_STR);
-        $query->bindParam(':password', $password, PDO::PARAM_STR);
-        $query->bindParam(':rating', $rating, PDO::PARAM_INT);
-        $query->bindParam(':type', $type, PDO::PARAM_STR);
-        $query->execute();
+        try {
+            $query = $connection->prepare('INSERT INTO users(username, password, rating, type) values(:username, :password, :rating, :type)');
+            $query->bindParam(':username', $username, PDO::PARAM_STR);
+            $query->bindParam(':password', $password, PDO::PARAM_STR);
+            $query->bindParam(':rating', $rating, PDO::PARAM_INT);
+            $query->bindParam(':type', $type, PDO::PARAM_STR);
+            $query->execute();
 
-        if($query->rowCount() === 0) {
-            echo "Error en la inserción";
+            if($query->rowCount() === 0) {
+                $_SESSION['message'] = "Error en la inserción";
+                header('Location: http://localhost/red-it/views/Register.php');
+                exit();
+            }
+            else {
+                header('Location: http://localhost/red-it/views/login.php');
+                exit();
+            }
         }
-        else {
-            header('Location: http://localhost/red-it/views/login.php');
+        catch(PDOException $e) {
+            echo $e;
         }
-    }
-    catch(PDOException $e) {
-        echo $e;
-     }
-    }
     }
 }
 
@@ -185,15 +213,19 @@ function putUsername($id_user, $username) {
             $query->execute();
 
             if($query->rowCount() === 0) {
-                echo "Error en la actualización";
+                $_SESSION['message'] = "Error en la actualización";
+                header('Location: http://localhost/red-it/views/Cambiar_Usuario.php');
                 exit();
             }
             else{
                 //echo "Registro guardado";
             }
         }
-        else{ echo "Ya existe un usuario con ese nombre";
-        exit();}
+        else{ 
+            $_SESSION['message'] = "Ya existe un usuario con ese nombre";
+            header('Location: http://localhost/red-it/views/Cambiar_Usuario.php');
+            exit();
+        }
     }
     catch(PDOException $e) {
         echo $e;
@@ -214,7 +246,9 @@ function putPassword($id_user, $password) {
         $query->execute();
 
         if($query->rowCount() === 0) {
-            echo "Error en la actualización";
+            $_SESSION['message'] = "Error en la actualización";
+            header('Location: http://localhost/red-it/views/Cambiar_contrasena.php');
+            exit();
         }
         else {
                 //echo "Registro guardado";
@@ -236,7 +270,9 @@ function deleteUser($id_user) {
         $query->execute();
     }
     else
-        echo "Error deleting record";
+        $_SESSION['message'] = "No introduciste una contraseña";
+        header('Location: http://localhost/red-it/views/Register.php');
+        exit();
     }
     catch(PDOException $e) {
         echo $e;

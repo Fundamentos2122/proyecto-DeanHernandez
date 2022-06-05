@@ -162,3 +162,22 @@ footer{
 button:hover{
     background-color: #ddd;
 }
+
+.error{
+    display: none;
+    width: 100%;
+    text-align: center;
+    border-bottom: 2px solid crimson;
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+
+.error.show{
+    display: block;
+    opacity: 1;
+    width: 100%;
+    text-align: center;
+    border-bottom: 2px solid crimson;
+    color: #D8000C;
+    background-color: #FFD2D2;
+}

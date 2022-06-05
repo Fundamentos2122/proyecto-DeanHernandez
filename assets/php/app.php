@@ -51,27 +51,13 @@ function getPosts() {
 function paintPosts(list) {
     let html = '';
 
-    //Sustituir con esta implementacion, agregar active an tabla
-    <?php
-            if($_SESSION["type"] !== "administrador"){
-                //echo  "hideDelete();";                
-            }
-    ?>
-
     for(var i = 0; i < list.length; i++) {
 
         html += 
             `<div class="Post" id="${list[i].id_post}" type="image">
-            <?php
-           //session_start();
-           if($_SESSION["type"] === "administrador"){
-                echo  ('
+            
+            <div><input type="submit" value="X"><br/></div>
 
-                <div><input type="submit" value="X"><br/></div>
-                
-                ');     
-            }
-            ?>
             <div class="Rating-box">
             <form action="../controllers/voteController.php" method="POST" autocomplete="off" class="flow" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="Vote_Post">
@@ -109,6 +95,13 @@ function paintPosts(list) {
     }
 
     postList.innerHTML = html;
+
+    //Sustituir con esta implementacion, agregar active an tabla
+    <?php
+            if($_SESSION["type"] !== "administrador"){
+                //echo  "hideDelete();";                
+            }
+    ?>
 }
 
 function viewPost(id_post) {
@@ -122,27 +115,12 @@ function viewPost(id_post) {
                 let post = JSON.parse(this.responseText);
                 console.log(post);
 
-        //modalPost.classList.add("show");
-
         let html = '';
-
-        //<div class="Comment-box">
-        //<button class="Post_viewlink" onclick="viewPost(${list[i].id_post})"> Visitar Hilo</p>
-        //</div> 
 
         html = 
             `<div class="Post" id="${post.id_post}" type="image">
             
-            <?php
-           //session_start();
-           if($_SESSION["type"] === "administrador"){
-                echo  ('
-
-                <div><input type="submit" value="X"><br/></div>
-                
-                ');     
-            }
-            ?>
+            <div><input type="submit" value="X"><br/></div>
             
             <div class="Rating-box">
             <form action="../controllers/voteController.php" method="POST" autocomplete="off" class="flow" enctype="multipart/form-data">
@@ -182,7 +160,6 @@ function viewPost(id_post) {
                     <input type="submit" id="btnCmt" value="Subir comentario">
                 </form>
         </div>`;
-        //Reemplazar el comment box con los comentarios
 
                 modalPost.innerHTML = html;
 
@@ -226,8 +203,6 @@ function getComments(id_post)
 
 function paintComments(list){
 
-    //modalPostComments.classList.add("show");
-
     let html = '';
 
     for(var i = 0; i < list.length; i++) {
@@ -237,16 +212,9 @@ function paintComments(list){
 
         <div class="Comment" id="${list[i].id_comment}">
             <p>${list[i].id_comment}</p>
-            <?php
-           //session_start();
-           if($_SESSION["type"] === "administrador"){
-                echo  ('
+        
+            <div><input type="submit" value="X"><br/></div>
 
-                <div><input type="submit" value="X"><br/></div>
-
-                ');     
-            }
-            ?>
             <div class="cmt-img">
             <img src="../resources/images/red-it_logo.png" alt=""></a>
             </div>
@@ -281,62 +249,19 @@ function paintComments(list){
 
     modalPostComments.innerHTML = html;
 
+    //Sustituir con esta implementacion, agregar active an tabla
+    <?php
+            if($_SESSION["type"] !== "administrador"){
+                //echo  "hideDelete();";                
+            }
+    ?>
+
     modalMain.classList.add("show");
 
 }
-/*
-function updatePosts(){
 
-    let xhttp = new XMLHttpRequest();
-
-    xhttp.open("GET", "../controllers/postsController.php", true);
-
-    xhttp.onreadystatechange = function() {
-        if (this.readyState === 4) {
-            //console.log(this.status);
-            if (this.status === 200) {
-                let list = JSON.parse(this.responseText);
-                updateP(list);
-            }
-            else {
-                console.log("Error");
-            }
-        }
-    };
-    
-    xhttp.send();
-
-    //return [];
+function hideDelete(){
 
 }
-
-function updateP(list){
-
-    let xhttp = new XMLHttpRequest();
-
-    for(var i = 0; i < list.length; i++){
-
-        xhttp.open("POST", "../controllers/postsController.php?id_post=" + list[i].id_post, true);
-
-        xhttp.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                console.log(this.status);
-                if (this.status === 200) {
-                    let resp = JSON.parse(this.responseText);
-                    console.log(this.responseText);
-                 }
-                else {
-                    console.log("Error");
-                 }
-            }
-    };
-
-    xhttp.send();
-
-    //return [];
-
-    }
-
-}*/
 
 </script>
