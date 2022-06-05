@@ -11,8 +11,9 @@ class Post {
     private $_text;
     private $_created_at;
     private $_updated_at;
+    private $_active;
 
-    public function __construct($id_post, $id_user, $username, $text, $title, $photo, $rating, $created_at, $updated_at) {
+    public function __construct($id_post, $id_user, $username, $text, $title, $photo, $rating, $created_at, $updated_at, $active) {
         $this->setPostId($id_post);
         $this->setUserId($id_user);
         $this->setUsername($username);
@@ -22,6 +23,7 @@ class Post {
         $this->setText($text);
         $this->setCreated_at($created_at);
         $this->setUpdated_at($updated_at);
+        $this->setActive($active);
     }
 
     public function getPostId() {
@@ -96,6 +98,14 @@ class Post {
         $this->_updated_at = $updated_at;
     }
 
+    public function getActive() {
+        return $this->_active;
+    }
+
+    public function setActive($active) {
+        $this->_active = $active;
+    }
+
     public function getArray() {
         $array = array();
 
@@ -108,6 +118,7 @@ class Post {
         $array["rating"] = $this->getRating();
         $array["created_at"] = $this->getCreated_at();
         $array["updated_at"] = $this->getUpdated_at();
+        $array["active"] = $this->getActive();
 
         return $array;
     }

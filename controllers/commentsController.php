@@ -37,9 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
             $rating = 0;
             $created_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
             $updated_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+            $active = 1;
 
             try {
-                $query = $connection->prepare('INSERT INTO comments VALUES(NULL, :id_user, :username, :id_post, :text, :rating, :created_at, :updated_at)');
+                $query = $connection->prepare('INSERT INTO comments VALUES(NULL, :id_user, :username, :id_post, :text, :rating, :created_at, :updated_at, :active)');
                  $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                  $query->bindParam(':username', $username, PDO::PARAM_STR);
                  $query->bindParam(':id_post', $id_post, PDO::PARAM_INT);
@@ -47,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
                  $query->bindParam(':rating', $rating, PDO::PARAM_INT);
                  $query->bindParam(':created_at', $created_at, PDO::PARAM_STR);
                  $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+                 $query->bindParam(':active', $active, PDO::PARAM_INT);
                  
                  $query->execute();
          
@@ -86,7 +88,7 @@ else if($_SERVER["REQUEST_METHOD"] === "GET"){
             $comments = array();;
     
             while($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $comment = new Comment($row['id_comment'], $row['id_user'], $row['username'], $row['id_post'], $row['text'], $row['rating'],  $row['created_at'], $row['updated_at']);
+                $comment = new Comment($row['id_comment'], $row['id_user'], $row['username'], $row['id_post'], $row['text'], $row['rating'],  $row['created_at'], $row['updated_at'], $row['active']);
                 $comments[] = $comment->getArray();
             }
     

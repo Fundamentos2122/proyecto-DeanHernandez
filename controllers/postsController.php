@@ -18,7 +18,6 @@ catch(PDOException $e) {
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    //Postear... un post
     if ($_POST["_method"] === "Create_Post"){
         
         session_start();
@@ -45,15 +44,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $rating = 0;
                 $created_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
                 $updated_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+                $active = 1;
 
-                //Si el tamaño de la foto es mayor a 0...
                 if ($_FILES["photo"]["size"] > 0) { 
                     $tmp_name = $_FILES["photo"]["tmp_name"];
                     $photo = file_get_contents($tmp_name);
                 }
 
                 try {
-                    $query = $connection->prepare('INSERT INTO posts VALUES(NULL, :id_user, :username, :text, :title, :photo, :rating, :created_at, :updated_at)');
+                    $query = $connection->prepare('INSERT INTO posts VALUES(NULL, :id_user, :username, :text, :title, :photo, :rating, :created_at, :updated_at, :active)');
                     $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                     $query->bindParam(':username', $username, PDO::PARAM_STR);
                     $query->bindParam(':text', $text, PDO::PARAM_STR);
@@ -62,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $query->bindParam(':rating', $rating, PDO::PARAM_INT);
                     $query->bindParam(':created_at', $created_at, PDO::PARAM_STR);
                     $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+                    $query->bindParam(':active', $active, PDO::PARAM_INT);
          
                     $query->execute();
  
@@ -89,33 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
     }
-    /*else{
-        //if($_POST["_method"] === "Update_Post")
-        //if(array_key_exists("id_post", $_POST)){
-
-            try{
-            $q = $connection->prepare('SELECT SUM(value) AS total_rating FROM post_votes WHERE id_post = :id_post');
-            $q->bindParam(':id_post', $id_post, PDO::PARAM_INT);
-            $q->execute();
-
-            $row = $q->fetch(PDO::FETCH_ASSOC);
-            $total_rating = $row['total_rating'];
-            
-            echo $total_rating;
-            echo json_encode($total_rating); //response text
-            }
-            catch(PDOException $e){
-                echo $e;
-                exit();
-            }
-
-        //}
-       // else{
-            //echo "No se recibio un id_post correcto";
-           // exit();
-        //}
-    }*/
-
+    
 }
 else if($_SERVER["REQUEST_METHOD"] === "GET"){
     if (array_key_exists("id_post", $_GET)) {
@@ -130,7 +104,7 @@ else if($_SERVER["REQUEST_METHOD"] === "GET"){
             $post;
     
             while($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $post = new Post($row['id_post'], $row['id_user'], $row['username'], $row['text'], $row['title'], $row['photo'], $row['rating'],  $row['created_at'], $row['updated_at']);
+                $post = new Post($row['id_post'], $row['id_user'], $row['username'], $row['text'], $row['title'], $row['photo'], $row['rating'],  $row['created_at'], $row['updated_at'], $row['active']);
             }
     
             echo json_encode($post->getArray()); //response text
@@ -151,7 +125,7 @@ else if($_SERVER["REQUEST_METHOD"] === "GET"){
             $posts = array();
     
             while($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $post = new Post($row['id_post'], $row['id_user'], $row['username'], $row['text'], $row['title'], $row['photo'], $row['rating'],  $row['created_at'], $row['updated_at']);
+                $post = new Post($row['id_post'], $row['id_user'], $row['username'], $row['text'], $row['title'], $row['photo'], $row['rating'],  $row['created_at'], $row['updated_at'], $row['active']);
                 $posts[] = $post->getArray();
             }
     
