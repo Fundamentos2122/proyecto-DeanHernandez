@@ -37,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit();
             }
 
-            try{
-
                 $id_user = $_SESSION["id_user"];
                 $username = $_SESSION["username"];
                 $text = $_POST["text"];
@@ -83,17 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit();
                 }
 
-                header('Location: http://localhost/red-it/views/index.php');
-            }
-            catch(PDOException $e)
-            {
-                echo $e;
-                exit();
-            }
         }
         else{
-            echo "Datos no encontrados";
-            exit();
+            $_SESSION['message'] = "Datos no encontrados";
+                    header('Location: http://localhost/red-it/views/Create_Thread.php');
+                    exit();
         }
 
     }

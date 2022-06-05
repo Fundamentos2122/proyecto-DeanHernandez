@@ -172,28 +172,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
         $type = "normal";
         $rating = 0;
-    
-        try {
-            $query = $connection->prepare('INSERT INTO users(username, password, rating, type) values(:username, :password, :rating, :type)');
-            $query->bindParam(':username', $username, PDO::PARAM_STR);
-            $query->bindParam(':password', $password, PDO::PARAM_STR);
-            $query->bindParam(':rating', $rating, PDO::PARAM_INT);
-            $query->bindParam(':type', $type, PDO::PARAM_STR);
-            $query->execute();
 
-            if($query->rowCount() === 0) {
-                $_SESSION['message'] = "Error en la inserción";
-                header('Location: http://localhost/red-it/views/Register.php');
-                exit();
+        try {
+
+            $q = $connection->prepare('SELECT * FROM users WHERE username = :username');
+            $q->bindParam(':username', $username, PDO::PARAM_STR);
+            $q->execute();
+            if($q->rowCount() === 0){
+    
+                try {
+                    $query = $connection->prepare('INSERT INTO users(username, password, rating, type) values(:username, :password, :rating, :type)');
+                    $query->bindParam(':username', $username, PDO::PARAM_STR);
+                    $query->bindParam(':password', $password, PDO::PARAM_STR);
+                    $query->bindParam(':rating', $rating, PDO::PARAM_INT);
+                    $query->bindParam(':type', $type, PDO::PARAM_STR);
+                    $query->execute();
+        
+                    if($query->rowCount() === 0) {
+                        $_SESSION['message'] = "Error en la inserción";
+                        header('Location: http://localhost/red-it/views/Register.php');
+                        exit();
+                    }
+                    else {
+                        header('Location: http://localhost/red-it/views/login.php');
+                        exit();
+                    }
+                }
+                catch(PDOException $e) {
+                        $_SESSION['message'] = "Error en la inserción";
+                        header('Location: http://localhost/red-it/views/Register.php');
+                        exit();
+                }
             }
-            else {
-                header('Location: http://localhost/red-it/views/login.php');
+            else{ 
+                $_SESSION['message'] = "Ya existe un usuario con ese nombre";
+                header('Location: http://localhost/red-it/views/Register.php');
                 exit();
             }
         }
         catch(PDOException $e) {
-            echo $e;
+            $_SESSION['message'] = "Error en la recuperación de usuarios";
+            header('Location: http://localhost/red-it/views/Register.php');
+            exit();
         }
+
     }
 }
 
