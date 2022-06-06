@@ -455,3 +455,16 @@ button:hover{
     color: #D8000C;
     background-color: #FFD2D2;
 }
+
+.btn-delete {
+    cursor: pointer;
+    border: none;
+    background-color: pink;
+    border: 1px solid red;
+    color: red;
+    font-weight: bold;
+}
+
+.btn-delete:hover{
+    background-color: rgb(255, 57, 57);
+}

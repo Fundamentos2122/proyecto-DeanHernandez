@@ -51,12 +51,18 @@ function getPosts() {
 function paintPosts(list) {
     let html = '';
 
-    for(var i = 0; i < list.length; i++) {
+    for(var i = 0; i < list.length; i++) 
+    {
 
-        html += 
+        if(list[i].active === 1)
+        {
+
+            html += 
             `<div class="Post" id="${list[i].id_post}" type="image">
             
-            <div><input type="submit" value="X"><br/></div>
+            <div>
+            <button class="btn-delete" onclick=\"deletePost(${list[i].id_post})\" >X</button>
+            </div>
 
             <div class="Rating-box">
             <form action="../controllers/voteController.php" method="POST" autocomplete="off" class="flow" enctype="multipart/form-data">
@@ -91,15 +97,19 @@ function paintPosts(list) {
                 <button class="Post_viewlink" onclick="viewPost(${list[i].id_post})"> Visitar Hilo</p>
                 </div>
             </div>
-        </div>`;
+            </div>`;
+        }
+
+        postList.innerHTML = html;
+
     }
 
     postList.innerHTML = html;
 
-    //Sustituir con esta implementacion, agregar active an tabla
+    //Si la sesion no es de tipo administrador oculta la funcion de borrar posts
     <?php
             if($_SESSION["type"] !== "administrador"){
-                //echo  "hideDelete();";                
+                echo  "hideDeletePost();";                
             }
     ?>
 }
@@ -119,9 +129,6 @@ function viewPost(id_post) {
 
         html = 
             `<div class="Post" id="${post.id_post}" type="image">
-            
-            <div><input type="submit" value="X"><br/></div>
-            
             <div class="Rating-box">
             <form action="../controllers/voteController.php" method="POST" autocomplete="off" class="flow" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="Vote_Post">
@@ -207,13 +214,18 @@ function paintComments(list){
 
     for(var i = 0; i < list.length; i++) {
 
-        html += 
-            `
+        if(list[i].active === 1)
+        {
 
+        html += 
+
+            `
         <div class="Comment" id="${list[i].id_comment}">
             <p>${list[i].id_comment}</p>
         
-            <div><input type="submit" value="X"><br/></div>
+            <div>
+            <button class="btn-delete" onclick=\"deleteComment(${list[i].id_comment})\" >X</button>
+            </div>
 
             <div class="cmt-img">
             <img src="../resources/images/red-it_logo.png" alt=""></a>
@@ -243,16 +255,18 @@ function paintComments(list){
                 </div>
             </div>
         </div> 
-
             `
+        
+        modalPostComments.innerHTML = html;
+        }
     }
 
     modalPostComments.innerHTML = html;
 
-    //Sustituir con esta implementacion, agregar active an tabla
+    //Si la sesion no es de tipo administrador oculta la funcion de borrar comentarios
     <?php
             if($_SESSION["type"] !== "administrador"){
-                //echo  "hideDelete();";                
+                echo  "hideDeleteComment();";                
             }
     ?>
 
@@ -260,8 +274,28 @@ function paintComments(list){
 
 }
 
-function hideDelete(){
+function deletePost(id){
+
+
 
 }
+
+function deleteComment(id){
+
+
+
+}
+
+function hideDeletePost(){
+    let btnDeletePost = document.querySelectorAll("button[onclick^='deletePost']");
+
+    btnDeletePost.forEach(btn => btn.remove());
+}
+
+function hideDeleteComment(){
+    let btnDeleteComment = document.querySelectorAll("button[onclick^='deleteComment']");
+
+    btnDeleteComment.forEach(btn => btn.remove());
+}       
 
 </script>
