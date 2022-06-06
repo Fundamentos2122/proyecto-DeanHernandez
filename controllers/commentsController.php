@@ -72,6 +72,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
             exit();
         }
 
+    }else if ($_POST["_method"] === "Delete_Comment"){
+
+        if(array_key_exists("id_comment", $_POST)){
+            $id_comment = $_POST["id_comment"];
+
+            try{
+                $query = $connection->prepare('UPDATE comments SET active = 0 WHERE id_comment = :id_comment');
+                $query->bindParam(':id_comment', $id_comment, PDO::PARAM_INT);
+                $query->execute();
+
+                if($query->rowCount() === 0) {
+                    $_SESSION['message'] = "Error en la actualización";
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+                else{
+                    header('Location: http://localhost/red-it/views/index.php');
+                     exit();
+                }
+            }catch(PDOException $e){
+                echo $e;
+                exit();
+            }
+
+        }
     }
 
 }

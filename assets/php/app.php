@@ -60,9 +60,13 @@ function paintPosts(list) {
             html += 
             `<div class="Post" id="${list[i].id_post}" type="image">
             
+            <form action="../controllers/postsController.php" method="POST" autocomplete="off cass="flow" enctype="multipart/form-data">
             <div>
-            <button class="btn-delete" onclick=\"deletePost(${list[i].id_post})\" >X</button>
+                <input type="hidden" name="_method" value="Delete_Post">
+                <input type="hidden" name="id_post" value="${list[i].id_post}">
+                <input type="submit" value="X" class="btn-delete">
             </div>
+            </form>
 
             <div class="Rating-box">
             <form action="../controllers/voteController.php" method="POST" autocomplete="off" class="flow" enctype="multipart/form-data">
@@ -109,7 +113,8 @@ function paintPosts(list) {
     //Si la sesion no es de tipo administrador oculta la funcion de borrar posts
     <?php
             if($_SESSION["type"] !== "administrador"){
-                echo  "hideDeletePost();";                
+                //echo  "hideDeletePost();";      
+                echo "hideDelete();";            
             }
     ?>
 }
@@ -223,9 +228,13 @@ function paintComments(list){
         <div class="Comment" id="${list[i].id_comment}">
             <p>${list[i].id_comment}</p>
         
+            <form action="../controllers/commentsController.php" method="POST" autocomplete="off cass="flow" enctype="multipart/form-data">
             <div>
-            <button class="btn-delete" onclick=\"deleteComment(${list[i].id_comment})\" >X</button>
+                <input type="hidden" name="_method" value="Delete_Comment">
+                <input type="hidden" name="id_comment" value="${list[i].id_comment}">
+                <input type="submit" value="X" class="btn-delete">
             </div>
+            </form>
 
             <div class="cmt-img">
             <img src="../resources/images/red-it_logo.png" alt=""></a>
@@ -266,7 +275,8 @@ function paintComments(list){
     //Si la sesion no es de tipo administrador oculta la funcion de borrar comentarios
     <?php
             if($_SESSION["type"] !== "administrador"){
-                echo  "hideDeleteComment();";                
+                //echo  "hideDeleteComment();";     
+                echo "hideDelete();";           
             }
     ?>
 
@@ -274,28 +284,25 @@ function paintComments(list){
 
 }
 
-function deletePost(id){
-
-
-
+function hideDelete(){
+    let btnDelete = document.querySelectorAll("input[value='X']");
+    btnDelete.forEach(input => input.remove());
 }
 
-function deleteComment(id){
+/*function hideDeletePost(){
+    //let btnDeletePost = document.querySelectorAll("button[onclick^='deletePost']");
+    //let btnDeletePost = document.querySelectorAll("input[value='X']");
+    //btnDeletePost.forEach(input => input.remove());
 
-
-
-}
-
-function hideDeletePost(){
-    let btnDeletePost = document.querySelectorAll("button[onclick^='deletePost']");
-
-    btnDeletePost.forEach(btn => btn.remove());
+    let btnDelete = document.querySelectorAll("input[value='X']");
+    btnDelete.forEach(input => input.remove());
 }
 
 function hideDeleteComment(){
-    let btnDeleteComment = document.querySelectorAll("button[onclick^='deleteComment']");
-
-    btnDeleteComment.forEach(btn => btn.remove());
-}       
+    //let btnDeleteComment = document.querySelectorAll("button[onclick^='deleteComment']");
+   // btnDeleteComment.forEach(btn => btn.remove());
+   
+}
+*/
 
 </script>

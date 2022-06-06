@@ -88,10 +88,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit();
         }
 
+    }else if ($_POST["_method"] === "Delete_Post"){
+
+        if(array_key_exists("id_post", $_POST)){
+            $id_post = $_POST["id_post"];
+
+            try{
+                $query = $connection->prepare('UPDATE posts SET active = 0 WHERE id_post = :id_post');
+                $query->bindParam(':id_post', $id_post, PDO::PARAM_INT);
+                $query->execute();
+
+                if($query->rowCount() === 0) {
+                    $_SESSION['message'] = "Error en la actualización";
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+                else{
+                    header('Location: http://localhost/red-it/views/index.php');
+                     exit();
+                }
+            }catch(PDOException $e){
+                echo $e;
+                exit();
+            }
+
+        }
     }
-    
 }
 else if($_SERVER["REQUEST_METHOD"] === "GET"){
+
     if (array_key_exists("id_post", $_GET)) {
         //Obtener un solo registro/post
         try {
