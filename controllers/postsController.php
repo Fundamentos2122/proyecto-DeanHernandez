@@ -89,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
     }else if ($_POST["_method"] === "Delete_Post"){
+        session_start();
 
         if(array_key_exists("id_post", $_POST)){
             $id_post = $_POST["id_post"];
@@ -112,6 +113,56 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit();
             }
 
+        }
+    }else if($_POST["_method"] === "Update_Post"){
+        if(array_key_exists("id_post", $_POST) && array_key_exists("title", $_POST) && array_key_exists("text", $_POST))
+        {
+
+            if($_POST["title"] === "")
+            {
+                session_start();
+                $_SESSION['message'] = "No introduciste un Titulo";
+                header('Location: http://localhost/red-it/views/index.php');
+                exit();
+            }
+
+            $id_post = $_POST["id_post"];
+            $title = $_POST["title"];
+            $text = $_POST["text"];
+            $updated_at = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+            $photo = "";
+
+            if ($_FILES["photo"]["size"] > 0) { 
+                $tmp_name = $_FILES["photo"]["tmp_name"];
+                $photo = file_get_contents($tmp_name);
+            }
+
+            try{
+                $query = $connection->prepare('UPDATE posts SET title = :title, text = :text, photo = :photo, updated_at = :updated_at WHERE id_post = :id_post');
+                $query->bindParam(':id_post', $id_post, PDO::PARAM_INT);
+                $query->bindParam(':title', $title, PDO::PARAM_STR);
+                $query->bindParam(':text', $text, PDO::PARAM_STR);
+                $query->bindParam(':photo', $photo, PDO::PARAM_STR);
+                $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+                $query->execute();
+
+                if($query->rowCount() === 0) {
+                    $_SESSION['message'] = "Error en la inserción";
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+                else{
+                    header('Location: http://localhost/red-it/views/index.php');
+                    exit();
+                }
+
+            }catch(PDOException $e){
+                echo $e;
+                exit();
+            }
+        }else{
+            echo "Faltaron recibir variables";
+            exit();
         }
     }
 }

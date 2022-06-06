@@ -37,6 +37,7 @@
 
         <?php 
         include("modal_post.php");
+        include("modal_postEdit.php");
         include("../assets/php/app.php");
         ?>
 

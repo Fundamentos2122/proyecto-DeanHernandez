@@ -59,31 +59,9 @@
   <p>Subir un imagen: </p>
   <br>
 
+    <!-- Metodo para enseñar imagen-->
     <input type="file" id="photo" name="photo" onchange="readURL(this);">
     <img id="post-img" src="#" alt="">
-    
-    <!-- //Metodo #1
-    <input type='file' onchange="readURL(this);" />
-    <img id="post-img-vid" src="#" alt="" />
-    -->
-
-    <!-- //Metodo #2
-    <input type="file" onchange="previewFile()"><br>
-    <img src="" height="200" alt="Vista previa...">
-    -->
-
-    <!-- //Metodo #3
-        
-        <select ng-model='option'>
-    <option value='image'>Image</option>
-    <option value='video'>Video</option>
-    </select>
-
-    <img class="cat-img" src="image path" style="width: 100px;margin: 10px 0px;" ng-if="option=='image'"> 
-
-    <video width="320" controls> <source src="videopath" type="video/mp4" ng-if="option=='video'"></video>
-    -->
-
     
     <div>
         <button type="submit">Subir Post</button>
