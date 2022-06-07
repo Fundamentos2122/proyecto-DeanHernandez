@@ -385,11 +385,11 @@ function editPost(id_post) {
         <div id="Post" class="tabcontent">
             <h3 style="text-align: center;">Post</h3>
             <div>
-                <input type="text" id="post-title" name="title" placeholder="*Ingresar el titulo del Post (Obligatorio)">
+                <input type="text" id="post-title" name="title" placeholder="*Ingresar el titulo del Post (Obligatorio)" value="${post.title}">
             </div>
             <br>
             <div>
-                <textarea id="Post-description" name="text" rows="30" placeholder="Descripción del post"></textarea>
+                <textarea id="Post-description" name="text" rows="30" placeholder="Descripción del post">${post.text}</textarea>
             </div>
         </div>
 
