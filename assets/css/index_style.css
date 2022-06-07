@@ -490,10 +490,28 @@ button:hover{
     border: 2px solid black;
 }
 
+/*
+
 #PostEdit > img{
     max-height: 100px;
     height: 100px;
 }
+
+.PostImage img{
+    max-height: 50px;
+}
+
+#pi > img{
+    max-height: 50px;
+    max-width: 100px;
+}
+
+.img-fluid{
+    max-height: 50px;
+    max-width: 100px;
+}
+
+*/
 
 
 

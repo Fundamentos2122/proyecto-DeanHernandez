@@ -194,6 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         exit();
                     }
                     else {
+                        
                         header('Location: http://localhost/red-it/views/login.php');
                         exit();
                     }
@@ -240,6 +241,18 @@ function putUsername($id_user, $username) {
                 exit();
             }
             else{
+
+                //Despues de modificar el nombre de usuario se actualizan los posts y comentarios con el nuevo nombre
+
+                $query = $connection->prepare('UPDATE posts SET username = :username WHERE id_user = :id_user');
+                $query->bindParam(':username', $username, PDO::PARAM_STR);
+                $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                $query->execute();
+
+                $query = $connection->prepare('UPDATE comments SET username = :username WHERE id_user = :id_user');
+                $query->bindParam(':username', $username, PDO::PARAM_STR);
+                $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                $query->execute();
                 //echo "Registro guardado";
             }
         }

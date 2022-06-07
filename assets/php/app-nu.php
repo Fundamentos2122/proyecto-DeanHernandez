@@ -52,6 +52,7 @@ function paintPosts(list) {
 
     for(var i = 0; i < list.length; i++) {
 
+    if(list[i].active === 1){
         html += 
             `<div class="Post" id="${list[i].id_post}" type="image">
             <div class="Rating-box">
@@ -78,7 +79,8 @@ function paintPosts(list) {
                 </div>
             </div>
         </div>`;
-    }
+        }
+    }   
 
     postList.innerHTML = html;
 }
@@ -170,6 +172,8 @@ function paintComments(list){
 
     for(var i = 0; i < list.length; i++) {
 
+        if(list[i].active === 1){
+
         html += 
             `
 
@@ -194,6 +198,7 @@ function paintComments(list){
         </div> 
 
             `
+        }
     }
 
     modalPostComments.innerHTML = html;

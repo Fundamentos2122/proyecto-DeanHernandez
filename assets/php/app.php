@@ -373,7 +373,7 @@ function editPost(id_post) {
                 <div class="text-box">
                     <p class="Post-text">${post.text}</p>
                 </div>
-                <div class="Post-Image">   
+                <div id="pi">   
                 <img src=\"data:image/jpeg;base64,${post.photo}"\" alt=\"\" class=\"img-fluid\">
                 </div>
          </div>
