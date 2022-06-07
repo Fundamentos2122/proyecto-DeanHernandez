@@ -303,11 +303,20 @@ function deleteUser($id_user) {
     if($query = $connection->prepare($query_string)){
         $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
         $query->execute();
+
+        $query2 = $connection->prepare('UPDATE posts SET active = 0 WHERE id_user = :id_user');
+        $query2->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $query2->execute();
+
+        $query3 = $connection->prepare('UPDATE comments SET active = 0 WHERE id_user = :id_user');
+        $query3->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $query3->execute();
     }
-    else
-        $_SESSION['message'] = "No introduciste una contraseña";
-        header('Location: http://localhost/red-it/views/Register.php');
+    else{
+        $_SESSION['message'] = "Error en eliminación de usuario";
+        header('Location: http://localhost/red-it/views/Configuration.php');
         exit();
+    }
     }
     catch(PDOException $e) {
         echo $e;
